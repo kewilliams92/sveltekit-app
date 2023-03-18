@@ -1,4 +1,4 @@
-import type { Handle, HandleFetch } from '@sveltejs/kit';
+import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
 export const handle1: Handle = async ({ event, resolve }) => {
@@ -26,4 +26,14 @@ export const handleFetch: HandleFetch = ({request, event, fetch}) => {
         }
     }
     return fetch(request)
+}
+
+export const handleError: HandleServerError = ({error, event}) => {
+    console.log('from handleError', error)
+    console.log('from handleError', event) //Send to sentry or any error logging service
+
+    return {
+        message: 'An unexpected error occurred',
+        code: 'UNEXPECTED_ERROR'
+    }
 }
